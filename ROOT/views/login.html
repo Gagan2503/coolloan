@@ -1,0 +1,51 @@
+<div layout="row" class="full-screen">
+
+    <div flex="70" layout="column" layout-align="center center" hide-xs show-gt-xs class="cover">
+        <div class="cover-content">
+
+            <p class="centrado">
+                Launched in April 2006, Cool Loans was one of the first micro-loans facilities catering exclusively to the micro loans market within Jamaica. Our lending policies are dictated by the realities of the people we serve, which is why we provide hassle free, unsecured instant loans.
+            </p>
+            <p class="centrado">
+                We know that life can unfold in unexpected ways so our short term loans can be used to plug a small hole or fill a big gap. With up to 24 months to repay and flexible payment options our customers can easily avoid going into debt.
+            </p>
+            <p class="centrado">
+                At Cool Loans, we believe in the power of relationships and our goal is to develop trust and start meaningful growth partnerships with our customers most of whom have become repeat borrowers.
+            </p>
+        </div>
+    </div>
+
+    <div layout="column" flex-gt-xs="30" flex-xs="100" class="login-container">
+        <!-- Logo with Organization Name -->
+        <div layout="row" layout-align="center center" class="login-m-form-wrapper">
+            <img src="images/mifos-logo-flat.png" alt="{{ 'label.heading.company' | translate }}" class="img-container" />
+        </div>
+
+        <div layout="row" flex="3 0 auto" layout-align="center start" style="margin-top:50px;">
+            <md-content>
+                <form name="log" layout="column" id="login-form" ng-submit="login(log.$valid)">
+                    <md-input-container layout-align="center center " class="login-input">
+                        <md-icon md-svg-src="images/icons/person.svg" aria-label="uid"></md-icon>
+                        <input type="text" name="username" id="uid" ng-model="loginCredentials.username" placeholder="{{ 'label.input.username' | translate }}" required />
+                        <form-validate valattributeform="log" valattribute="uid" />
+                    </md-input-container>
+
+                    <md-input-container layout-align="center center " class="login-input">
+                        <md-icon md-svg-src="images/icons/vpn_key.svg" aria-label="pass"></md-icon>
+                        <input type="password" name="password" id="pwd" ng-model="loginCredentials.password" autocomplete="new-password" placeholder="{{ 'label.input.password' | translate }}" required/>
+                        <form-validate valattributeform="log" valattribute="pwd" />
+                    </md-input-container>
+
+                    <md-button ng-disabled="coords.disabled" class="md-raised md-primary login-button" layout-align="center center" type="submit" ng-show="!load" id="login-button">
+                        {{'label.button.signin' | translate }}
+                    </md-button>
+
+                    <md-button class="md-raised md-primary login-button" layout-align="center center" type="submit" ng-show="load">
+                        <img data-ng-src="images/ring.svg" alt="" />
+                        <b>{{ 'label.input.loading' | translate }}...</b>
+                    </md-button>
+                </form>
+            </md-content>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,140 @@
+<div id="menubarContainer" layout="row" ng-cloak>
+    <md-toolbar md-theme="mifos" layout="row" layout-align="space-between left">
+        <div class="md-toolbar-tools" style="width:100%;">
+            <div class="menus" layout-wrap layout="row" layout-fill layout-align="space-between left" style="min-height:70px;width:100%;">
+                <div layout="row" layout-align="left left" style="width:100%;">
+                    <!--The left side is hidden when the screen size is larger than small --->
+                    <md-button aria-label="btn_hide" class="menu" hide-gt-sm><i class="fa fa-bars"></i></md-button>
+
+                    <a class="navbar-brand" href="#!/home">
+                        <img src="./images/logo_header.png" alt="" style="height: inherit;">
+                    </a>
+                    <!-- CLIENTS -->
+                    <md-button ng-href="#!/clients" has-permission='READ_CLIENT' class="automargin top-menu">
+                        <i class="fa fa-users"></i> {{'label.anchor.clients' | translate }}
+                    </md-button>
+                    <!-- GROUPS -->
+                    <md-button ng-href="#!/groups" ng-show="enableGroups" has-permission='READ_GROUP' class="automargin top-menu">
+                        <i class="fa fa-users"></i> {{'label.anchor.groups' | translate }}
+                    </md-button>
+                    <!-- ACCOUNTING -->
+                    <md-button ng-href="#!/accounting" has-permission='READ_ACCOUNTING' class="automargin top-menu">
+                        <i class="fa fa-calculator"></i> {{'label.anchor.accounting' | translate }}
+                    </md-button>
+                    <!--  -->
+                    <md-menu>
+                        <md-button aria-label="Reports menu" has-permission='READ_REPORT' ng-mouseenter="$mdMenu.open()" ng-click="$mdMenu.open()">
+                            <i class="fa fa-bar-chart-o"></i> {{'label.anchor.reports' | translate }}
+                        </md-button>
+                        <md-menu-content width="6" ng-mouseleave="$mdCloseMenu()">
+                            <md-menu-item>
+                                <md-button ng-href="#!/reports/all">
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <span md-menu-align-target>{{'label.reports.type.all' | translate }}</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/reports/clients">
+                                    <i class="fa fa-users"></i>
+                                    <span md-menu-align-target>{{'label.reports.type.clients' | translate }}</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/reports/loans">
+                                    <i class="fa fa-money"></i>
+                                    <span md-menu-align-target>{{'label.reports.type.loans' | translate }}</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/reports/savings">
+                                    <i class="fa fa-money"></i>
+                                    <span md-menu-align-target>{{'label.reports.type.savings' | translate }}</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/reports/accounting">
+                                    <i class="fa fa-calculator"></i>
+                                    <span md-menu-align-target>{{'label.reports.type.accounting' | translate }}</span>
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/reports/funds">
+                                    <i class="fa fa-money"></i>
+                                    <span md-menu-align-target>{{'label.reports.type.funds' | translate }}</span>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                    <md-menu>
+                        <md-button ng-mouseenter="$mdMenu.open()" ng-click="$mdMenu.open()">
+                            <i class="fa fa-bank"></i> {{'label.anchor.admin' | translate }}
+                        </md-button>
+                        <md-menu-content width="4" ng-mouseleave="$mdCloseMenu()">
+                            <md-menu-item>
+                                <md-button ng-href="#!/users" has-permission='READ_USER'>
+                                    <i class="fa fa-users"></i> {{'label.anchor.users' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/organization">
+                                    <i class="fa fa-building"></i> {{'label.anchor.organization' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/system">
+                                    <i class="fa fa-cogs"></i> {{'label.anchor.system' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/products">
+                                    <i class="fa fa-money"></i> {{'label.anchor.products' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/templates" has-permission='READ_TEMPLATE'>
+                                    <i class="fa fa-file"></i> {{'label.anchor.templates' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                    <!--  Blank -->
+                    <span flex ng-show="!toggleSearch"></span>
+                    <!--  Search bar -->
+                    <md-input-container ng-show="toggleSearch" class="md-input-container-small" style="padding-left:20%" flex>
+                        <input type="text" ng-model="searchText" aria-label="filter" class="input-secondary small-font" ng-keyup="$event.keyCode == 13 && searchText.length > 4 && searchAll(searchText)">
+                    </md-input-container>
+                    <md-button aria-label="search menu" class="md-icon-button automargin top-menu" ng-click="showSearchBar(!toggleSearch)">
+                        <i class="fa fa-search"></i>
+                    </md-button>
+                    <md-button aria-label="notifications menu" class="md-icon-button automargin top-menu" ng-href="#!/notifications">
+                        <i class="fa fa-bell"></i>
+                    </md-button>
+                    <md-menu>
+                        <md-button aria-label="Settings menu" class="md-icon-button" ng-mouseenter="$mdMenu.open()" ng-click="$mdMenu.open()">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </md-button>
+                        <md-menu-content width="4" ng-mouseleave="$mdCloseMenu()">
+                            <md-menu-item>
+                                <md-button ng-href="#!/profile">
+                                    <i class="fa fa-user"></i> {{'label.anchor.profile' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-href="#!/usersetting">
+                                    <i class="fa fa-wrench"></i> {{'label.anchor.settings' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="logout()">
+                                    <i class="fa fa-power-off"></i> {{'label.anchor.logout' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+</div>
