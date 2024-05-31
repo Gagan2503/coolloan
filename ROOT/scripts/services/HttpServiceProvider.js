@@ -2,20 +2,23 @@
     mifosX.services = _.extend(module, {
         HttpServiceProvider: function () {
             var requestInterceptors = {};
+            var baseUrl = 'https://localhost:8443';
 
             this.addRequestInterceptor = function (id, interceptorFn) {
                 requestInterceptors[id] = interceptorFn;
-            };
+            };   
 
             this.removeRequestInterceptor = function (id) {
                 delete requestInterceptors[id];
             };
 
             this.$get = ['$http', function (http) {
-                var HttpService = function () {
+                var HttpService = function (customBaseUrl) {
                     var getConfig = function (config) {
                         return _.reduce(_.values(requestInterceptors), function (c, i) {
-                            return i(c);
+                            console.log(c);
+                            return c;
+                            
                         }, config);
                     };
 
@@ -24,7 +27,7 @@
                         self[method] = function (url) {
                             var config = getConfig({
                                 method: method.toUpperCase(),
-                                url: url
+                                url: customBaseUrl || baseUrl + url 
                             });
                             return http(config);
                         };
@@ -33,15 +36,22 @@
                         self[method] = function (url, data) {
                             var config = getConfig({
                                 method: method.toUpperCase(),
-                                url: url,
+                                url: customBaseUrl || baseUrl + url,
                                 data: data
                             });
+                            if (config.headers && config.headers.Authorization) {
+                                config.headers.Authorization = "Basic " + 'bWlmb3M6cGFzc3dvcmQ='; // Replace yourAccessToken with the actual access token
+                            }
+                            console.log(config);
                             return http(config);
                         };
                     });
                     this.setAuthorization = function (key, isOauth) {
-                        if(isOauth){
-                            http.defaults.headers.common.Authorization = "bearer " + key;
+                        console.log(key, isOauth);
+                        http.defaults.headers.common.Authorization = "Basic " + 'bWlmb3M6cGFzc3dvcmQ=';
+
+                        if (isOauth) {
+                            http.defaults.headers.common.Authorization = "Basic " + key;
                         } else {
                             http.defaults.headers.common.Authorization = "Basic " + key;
                         }
@@ -54,12 +64,14 @@
 
                     this.setTwoFactorAccessToken = function (token) {
                         http.defaults.headers.common['Fineract-Platform-TFA-Token'] = token;
-                    }
+                    };
                 };
+
                 return new HttpService();
             }];
         }
     });
+
     mifosX.ng.services.config(function ($provide) {
         $provide.provider('HttpService', mifosX.services.HttpServiceProvider);
     }).run(function ($log) {

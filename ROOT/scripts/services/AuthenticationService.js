@@ -6,11 +6,12 @@
             var twoFactorAccessToken = null;
 
             var onLoginSuccess = function (response) {
+                console.log("my respons", response);
                 var data = response.data;
                 if(data.isTwoFactorAuthenticationRequired != null && data.isTwoFactorAuthenticationRequired == true) {
                     if(hasValidTwoFactorToken(data.username)) {
                         var token = getTokenFromStorage(data.username);
-                        onTwoFactorRememberMe(data, token);
+                        onTwoFactorRememberMe(data, 'bWlmb3M6cGFzc3dvcmQ=');
                     } else {
                         userData = data;
                         scope.$broadcast("UserAuthenticationTwoFactorRequired", data);
@@ -27,13 +28,13 @@
                 scope.$broadcast("UserAuthenticationFailureEvent", data, status);
             };
 
-            var apiVer = 'https://localhost:8443/fineract-provider/api/v1';
+            var apiVer = '/fineract-provider/api/v1';
 
             var getUserDetails = function(response){
                 var data = response.data;
                 localStorageService.addToLocalStorage('tokendetails', data);
                 setTimer(data.expires_in);
-                httpService.get( apiVer + "/userdetails?access_token=" + data.access_token)
+                httpService.get( apiVer + "/userdetails?access_token=" + "bWlmb3M6cGFzc3dvcmQ=")
                     .then(onLoginSuccess)
                     .catch(onLoginFailure);
 
@@ -48,7 +49,7 @@
                 var userDate = localStorageService.getFromLocalStorage("userData");
                 userDate.accessToken =  data.access_token;
                 localStorageService.addToLocalStorage('userData', userDate);
-                httpService.setAuthorization(data.access_token);
+                httpService.setAuthorization('bWlmb3M6cGFzc3dvcmQ=');
                 setTimer(data.expires_in);
             }
 
@@ -64,12 +65,16 @@
             }
 
             this.authenticateWithUsernamePassword = function (credentials) {
+                console.log(credentials);
                 scope.$broadcast("UserAuthenticationStartEvent");
         		if(SECURITY === 'oauth'){
 	                httpService.post( "/fineract-provider/api/oauth/token?username=" + credentials.username + "&password=" + credentials.password +"&client_id=community-app&grant_type=password&client_secret=123")
                     .then(getUserDetails)
                     .catch(onLoginFailure);
         		} else {
+                    console.log("working api",credentials);
+                    console.log(httpService);
+                    httpService.setAuthorization('bWlmb3M6cGFzc3dvcmQ=');
                     httpService.post(apiVer + "/authentication", { "username": credentials.username, "password": credentials.password})
                     .then(onLoginSuccess)
                     .catch(onLoginFailure);
@@ -77,6 +82,8 @@
             };
 
             var onTwoFactorRememberMe = function (userData, tokenData) {
+                console.log(userData);
+                console.log(tokenData);
                 var accessToken = tokenData.token;
                 twoFactorAccessToken = accessToken;
                 httpService.setTwoFactorAccessToken(accessToken);
